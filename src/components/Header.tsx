@@ -3,9 +3,11 @@ import { Music, User, Menu } from 'lucide-react';
 
 interface HeaderProps {
   onMenuClick?: () => void;
+  onDJSignup?: () => void;
+  onHowItWorks?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
+export const Header: React.FC<HeaderProps> = ({ onMenuClick, onDJSignup, onHowItWorks }) => {
   return (
     <header className="bg-white shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,8 +21,18 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           
           <nav className="hidden md:flex items-center space-x-8">
             <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Find DJs</a>
-            <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">How it Works</a>
-            <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">For DJs</a>
+            <button 
+              onClick={onHowItWorks}
+              className="text-gray-700 hover:text-gray-900 font-medium"
+            >
+              How it Works
+            </button>
+            <button 
+              onClick={onDJSignup}
+              className="text-gray-700 hover:text-gray-900 font-medium"
+            >
+              For DJs
+            </button>
           </nav>
 
           <div className="flex items-center space-x-4">

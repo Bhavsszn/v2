@@ -4,11 +4,15 @@ import { MapPin } from 'lucide-react';
 interface WelcomeScreenProps {
   onSearchByLocation: () => void;
   onSearchByName: () => void;
+  onDJSignup: () => void;
+  onHowItWorks: () => void;
 }
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   onSearchByLocation,
-  onSearchByName
+  onSearchByName,
+  onDJSignup,
+  onHowItWorks
 }) => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -42,6 +46,24 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             className="w-full bg-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
           >
             By Name
+          </button>
+        </div>
+
+        <div className="mt-8 pt-6 border-t border-gray-200">
+          <p className="text-sm text-gray-600 mb-4">
+            Are you a DJ looking to get more gigs?
+          </p>
+          <button
+            onClick={onDJSignup}
+            className="w-full bg-red-500 text-white py-2 px-4 rounded-lg font-medium hover:bg-red-600 transition-colors mb-3"
+          >
+            Sign Up as a DJ
+          </button>
+          <button
+            onClick={onHowItWorks}
+            className="w-full text-gray-600 hover:text-gray-800 font-medium"
+          >
+            How it Works
           </button>
         </div>
       </div>

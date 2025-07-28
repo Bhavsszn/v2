@@ -15,7 +15,8 @@ export const mockDJs: DJ[] = [
       email: 'djair@example.com',
       phone: '402.555.1001',
       facebook: 'https://www.facebook.com/djair'
-    }
+    },
+    priceRange: '$150-200/hr'
   },
   {
     id: '2',
@@ -25,7 +26,13 @@ export const mockDJs: DJ[] = [
     reviewCount: 104,
     eventTypes: ['WEDDINGS', 'CLUBS', 'PARTIES', 'PROMS', 'OTHER'],
     location: 'Des Moines, IA',
-    availability: 'AVAILABLE'
+    availability: 'AVAILABLE',
+    bio: 'High-energy DJ specializing in club events and parties. Known for reading the crowd perfectly.',
+    contact: {
+      email: 'djtaylorg@example.com',
+      phone: '515.555.2002'
+    },
+    priceRange: '$125-175/hr'
   },
   {
     id: '3',
@@ -35,7 +42,46 @@ export const mockDJs: DJ[] = [
     reviewCount: 87,
     eventTypes: ['WEDDINGS', 'CLUBS', 'PARTIES', 'PROMS', 'OTHER'],
     location: 'Des Moines, IA',
-    availability: 'AVAILABLE'
+    availability: 'AVAILABLE',
+    bio: 'Versatile DJ with expertise in multiple genres. Perfect for weddings and corporate events.',
+    contact: {
+      email: 'djhenny@example.com',
+      phone: '515.555.3003'
+    },
+    priceRange: '$100-150/hr'
+  },
+  // Add more DJs for different locations
+  {
+    id: '4',
+    name: 'DJ Mike Storm',
+    avatar: 'https://images.pexels.com/photos/1644888/pexels-photo-1644888.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop',
+    rating: 4.8,
+    reviewCount: 92,
+    eventTypes: ['WEDDINGS', 'CORPORATE', 'PARTIES'],
+    location: 'Omaha, NE',
+    availability: 'AVAILABLE',
+    bio: 'Professional wedding DJ with a passion for creating unforgettable moments.',
+    contact: {
+      email: 'djmikestorm@example.com',
+      phone: '402.555.4004'
+    },
+    priceRange: '$175-225/hr'
+  },
+  {
+    id: '5',
+    name: 'DJ Luna',
+    avatar: 'https://images.pexels.com/photos/1540406/pexels-photo-1540406.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop',
+    rating: 4.9,
+    reviewCount: 156,
+    eventTypes: ['CLUBS', 'PARTIES', 'FESTIVALS'],
+    location: 'Lincoln, NE',
+    availability: 'AVAILABLE',
+    bio: 'Electronic music specialist with festival experience and cutting-edge equipment.',
+    contact: {
+      email: 'djluna@example.com',
+      phone: '402.555.5005'
+    },
+    priceRange: '$200-300/hr'
   }
 ];
 

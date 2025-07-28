@@ -11,8 +11,10 @@ import { useDJs } from './hooks/useDJs';
 import { useReviews } from './hooks/useReviews';
 import { useBookings } from './hooks/useBookings';
 import { DJ, SearchFilters } from './types';
+import { DJSignupScreen } from './components/DJSignupScreen';
+import { HowItWorksScreen } from './components/HowItWorksScreen';
 
-type Screen = 'welcome' | 'search' | 'results' | 'profile';
+type Screen = 'welcome' | 'search' | 'results' | 'profile' | 'dj-signup' | 'how-it-works';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('welcome');
@@ -32,6 +34,14 @@ function App() {
   const handleSearchByName = () => {
     // For now, redirect to location search
     setCurrentScreen('search');
+  };
+
+  const handleDJSignup = () => {
+    setCurrentScreen('dj-signup');
+  };
+
+  const handleHowItWorks = () => {
+    setCurrentScreen('how-it-works');
   };
 
   const handleSearch = async (filters: SearchFilters) => {
@@ -63,6 +73,8 @@ function App() {
   const handleBack = () => {
     switch (currentScreen) {
       case 'search':
+      case 'dj-signup':
+      case 'how-it-works':
         setCurrentScreen('welcome');
         break;
       case 'results':
@@ -76,13 +88,28 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {currentScreen !== 'welcome' && <Header />}
+      {currentScreen !== 'welcome' && (
+        <Header 
+          onDJSignup={handleDJSignup}
+          onHowItWorks={handleHowItWorks}
+        />
+      )}
       
       {currentScreen === 'welcome' && (
         <WelcomeScreen
           onSearchByLocation={handleSearchByLocation}
           onSearchByName={handleSearchByName}
+          onDJSignup={handleDJSignup}
+          onHowItWorks={handleHowItWorks}
         />
+      )}
+
+      {currentScreen === 'dj-signup' && (
+        <DJSignupScreen onBack={handleBack} />
+      )}
+
+      {currentScreen === 'how-it-works' && (
+        <HowItWorksScreen onBack={handleBack} />
       )}
 
       {currentScreen === 'search' && (

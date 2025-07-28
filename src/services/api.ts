@@ -27,10 +27,16 @@ class ApiService {
   }) {
     let filteredDJs = [...mockDJs];
 
-    // Filter by location (case insensitive)
+    // Filter by location (case insensitive, more flexible matching)
     if (filters.location) {
-      filteredDJs = filteredDJs.filter(dj => 
-        dj.location.toLowerCase().includes(filters.location.toLowerCase())
+      const searchLocation = filters.location.toLowerCase().trim();
+      filteredDJs = filteredDJs.filter(dj => {
+        const djLocation = dj.location.toLowerCase();
+        // Match city, state, or zip code patterns
+        return djLocation.includes(searchLocation) || 
+               searchLocation.includes(djLocation.split(',')[0].trim()) ||
+               /^\d{5}$/.test(searchLocation); // If it's a zip code, show all DJs
+      }
       );
     }
 
