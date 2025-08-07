@@ -6,13 +6,15 @@ interface WelcomeScreenProps {
   onSearchByName: () => void;
   onDJSignup: () => void;
   onHowItWorks: () => void;
+  onProducts: () => void;
 }
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   onSearchByLocation,
   onSearchByName,
   onDJSignup,
-  onHowItWorks
+  onHowItWorks,
+  onProducts
 }) => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -46,6 +48,13 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             className="w-full bg-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
           >
             By Name
+          </button>
+          
+          <button
+            onClick={onProducts}
+            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          >
+            Audio Services
           </button>
         </div>
 
