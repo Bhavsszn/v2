@@ -13,19 +13,35 @@ import { useBookings } from './hooks/useBookings';
 import { DJ, SearchFilters } from './types';
 import { DJSignupScreen } from './components/DJSignupScreen';
 import { HowItWorksScreen } from './components/HowItWorksScreen';
+import { ProductsPage } from './components/ProductsPage';
+import { SuccessPage } from './components/SuccessPage';
+import { LoginPage } from './components/auth/LoginPage';
+import { SignupPage } from './components/auth/SignupPage';
+import { AuthCallback } from './components/auth/AuthCallback';
+import { useAuth } from './hooks/useAuth';
 
-type Screen = 'welcome' | 'search' | 'results' | 'profile' | 'dj-signup' | 'how-it-works';
+type Screen = 'welcome' | 'search' | 'results' | 'profile' | 'dj-signup' | 'how-it-works' | 'products' | 'success' | 'login' | 'signup' | 'auth-callback';
 
 function App() {
+  const { user, loading: authLoading } = useAuth();
   const [currentScreen, setCurrentScreen] = useState<Screen>('welcome');
   const [searchFilters, setSearchFilters] = useState<SearchFilters | null>(null);
   const [selectedDJ, setSelectedDJ] = useState<DJ | null>(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   
   // Custom hooks for data management
   const { djs, loading: djsLoading, error: djsError, searchDJs } = useDJs();
   const { reviews, loading: reviewsLoading, error: reviewsError } = useReviews(selectedDJ?.id);
   const { loading: bookingLoading, error: bookingError, createBooking } = useBookings();
+
+  // Check for auth callback on mount
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash.includes('access_token') || hash.includes('error')) {
+      setCurrentScreen('auth-callback');
+    }
+  }, []);
 
   const handleSearchByLocation = () => {
     setCurrentScreen('search');
@@ -42,6 +58,26 @@ function App() {
 
   const handleHowItWorks = () => {
     setCurrentScreen('how-it-works');
+  };
+
+  const handleProducts = () => {
+    setCurrentScreen('products');
+  };
+
+  const handleLogin = () => {
+    setAuthMode('login');
+    setCurrentScreen('login');
+  };
+
+  const handleSignup = () => {
+    setAuthMode('signup');
+    setCurrentScreen('signup');
+  };
+
+  const handleAuthComplete = () => {
+    setCurrentScreen('welcome');
+    // Clear URL hash
+    window.history.replaceState(null, '', window.location.pathname);
   };
 
   const handleSearch = async (filters: SearchFilters) => {
@@ -75,6 +111,10 @@ function App() {
       case 'search':
       case 'dj-signup':
       case 'how-it-works':
+      case 'products':
+      case 'success':
+      case 'login':
+      case 'signup':
         setCurrentScreen('welcome');
         break;
       case 'results':
@@ -86,12 +126,24 @@ function App() {
     }
   };
 
+  // Show loading spinner while checking auth state
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {currentScreen !== 'welcome' && (
         <Header 
           onDJSignup={handleDJSignup}
           onHowItWorks={handleHowItWorks}
+          onProducts={handleProducts}
+          onLogin={handleLogin}
+          onSignup={handleSignup}
         />
       )}
       
@@ -101,6 +153,7 @@ function App() {
           onSearchByName={handleSearchByName}
           onDJSignup={handleDJSignup}
           onHowItWorks={handleHowItWorks}
+          onProducts={handleProducts}
         />
       )}
 
@@ -110,6 +163,38 @@ function App() {
 
       {currentScreen === 'how-it-works' && (
         <HowItWorksScreen onBack={handleBack} />
+      )}
+
+      {currentScreen === 'products' && (
+        <ProductsPage onBack={handleBack} />
+      )}
+
+      {currentScreen === 'success' && (
+        <SuccessPage onBack={handleBack} />
+      )}
+
+      {currentScreen === 'login' && (
+        <LoginPage 
+          onBack={handleBack}
+          onSwitchToSignup={() => {
+            setAuthMode('signup');
+            setCurrentScreen('signup');
+          }}
+        />
+      )}
+
+      {currentScreen === 'signup' && (
+        <SignupPage 
+          onBack={handleBack}
+          onSwitchToLogin={() => {
+            setAuthMode('login');
+            setCurrentScreen('login');
+          }}
+        />
+      )}
+
+      {currentScreen === 'auth-callback' && (
+        <AuthCallback onComplete={handleAuthComplete} />
       )}
 
       {currentScreen === 'search' && (
