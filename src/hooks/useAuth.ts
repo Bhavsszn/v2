@@ -25,31 +25,55 @@ export const useAuth = () => {
   }, []);
 
   const signUp = async (email: string, password: string, firstName: string, lastName?: string, username?: string) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          first_name: firstName,
-          last_name: lastName || '',
-          username: username || '',
-          full_name: lastName ? `${firstName} ${lastName}` : firstName,
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            first_name: firstName,
+            last_name: lastName || '',
+            username: username || '',
+            full_name: lastName ? `${firstName} ${lastName}` : firstName,
+          },
         },
-      },
-    });
+      });
 
-    if (error) throw error;
-    return data;
+      if (error) {
+        if (error.message.includes('over_email_send_rate_limit')) {
+          throw new Error('Too many signup attempts. Please wait a minute before trying again.');
+        }
+        throw error;
+      }
+      return data;
+    } catch (error: any) {
+      if (error.message.includes('over_email_send_rate_limit')) {
+        throw new Error('Too many signup attempts. Please wait a minute before trying again.');
+      }
+      throw error;
+    }
   };
 
   const signIn = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) throw error;
-    return data;
+      if (error) {
+        if (error.message.includes('over_email_send_rate_limit')) {
+          throw new Error('Too many login attempts. Please wait a minute before trying again.');
+        }
+        throw error;
+      }
+      return data;
+    } catch (error: any) {
+      if (error.message.includes('over_email_send_rate_limit')) {
+        throw new Error('Too many login attempts. Please wait a minute before trying again.');
+      }
+      throw error;
+    }
   };
 
   const signInWithGoogle = async () => {
