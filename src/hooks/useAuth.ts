@@ -26,6 +26,7 @@ export const useAuth = () => {
 
   const signUp = async (email: string, password: string, firstName: string, lastName?: string, username?: string) => {
     try {
+      console.log('Starting signup process...', { email, firstName });
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -40,13 +41,16 @@ export const useAuth = () => {
       });
 
       if (error) {
+        console.error('Signup error:', error);
         if (error.message.includes('over_email_send_rate_limit')) {
           throw new Error('Too many signup attempts. Please wait a minute before trying again.');
         }
         throw error;
       }
+      console.log('Signup successful:', data);
       return data;
     } catch (error: any) {
+      console.error('Signup catch block:', error);
       if (error.message.includes('over_email_send_rate_limit')) {
         throw new Error('Too many signup attempts. Please wait a minute before trying again.');
       }
@@ -56,19 +60,23 @@ export const useAuth = () => {
 
   const signIn = async (email: string, password: string) => {
     try {
+      console.log('Starting signin process...', { email });
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) {
+        console.error('Signin error:', error);
         if (error.message.includes('over_email_send_rate_limit')) {
           throw new Error('Too many login attempts. Please wait a minute before trying again.');
         }
         throw error;
       }
+      console.log('Signin successful:', data);
       return data;
     } catch (error: any) {
+      console.error('Signin catch block:', error);
       if (error.message.includes('over_email_send_rate_limit')) {
         throw new Error('Too many login attempts. Please wait a minute before trying again.');
       }
@@ -77,6 +85,7 @@ export const useAuth = () => {
   };
 
   const signInWithGoogle = async () => {
+    console.log('Starting Google OAuth...');
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -84,11 +93,16 @@ export const useAuth = () => {
       },
     });
 
-    if (error) throw error;
+    if (error) {
+      console.error('Google OAuth error:', error);
+      throw error;
+    }
+    console.log('Google OAuth initiated:', data);
     return data;
   };
 
   const signInWithFacebook = async () => {
+    console.log('Starting Facebook OAuth...');
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'facebook',
       options: {
@@ -96,7 +110,11 @@ export const useAuth = () => {
       },
     });
 
-    if (error) throw error;
+    if (error) {
+      console.error('Facebook OAuth error:', error);
+      throw error;
+    }
+    console.log('Facebook OAuth initiated:', data);
     return data;
   };
 

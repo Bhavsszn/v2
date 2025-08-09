@@ -16,12 +16,15 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBack, onSwitchToSignup }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Login form submitted with email:', email);
     setLoading(true);
     setError(null);
 
     try {
       await signIn(email, password);
+      console.log('Login successful');
     } catch (err) {
+      console.error('Login error in component:', err);
       setError(err instanceof Error ? err.message : 'Failed to sign in');
     } finally {
       setLoading(false);
@@ -29,22 +32,26 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBack, onSwitchToSignup }
   };
 
   const handleGoogleLogin = async () => {
+    console.log('Google login clicked');
     setLoading(true);
     setError(null);
     try {
       await signInWithGoogle();
     } catch (err) {
+      console.error('Google login error:', err);
       setError(err instanceof Error ? err.message : 'Failed to sign in with Google');
       setLoading(false);
     }
   };
 
   const handleFacebookLogin = async () => {
+    console.log('Facebook login clicked');
     setLoading(true);
     setError(null);
     try {
       await signInWithFacebook();
     } catch (err) {
+      console.error('Facebook login error:', err);
       setError(err instanceof Error ? err.message : 'Failed to sign in with Facebook');
       setLoading(false);
     }

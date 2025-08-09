@@ -34,6 +34,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onBack, onSwitchToLogin 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Form submitted with data:', { firstName, lastName, username, email });
     setLoading(true);
     setError(null);
 
@@ -50,18 +51,23 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onBack, onSwitchToLogin 
     }
 
     try {
+      console.log('Calling signUp...');
       const { user } = await signUp(email, password, firstName, lastName, username);
+      console.log('SignUp completed, user:', user);
       
       // Upload profile image if provided
       if (profileImage && user) {
         try {
+          console.log('Uploading profile image...');
           await uploadProfileImage(profileImage);
+          console.log('Profile image uploaded successfully');
         } catch (uploadError) {
           console.error('Failed to upload profile image:', uploadError);
           // Don't fail the signup if image upload fails
         }
       }
     } catch (err) {
+      console.error('Signup error in component:', err);
       setError(err instanceof Error ? err.message : 'Failed to create account');
     } finally {
       setLoading(false);
@@ -69,22 +75,26 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onBack, onSwitchToLogin 
   };
 
   const handleGoogleSignup = async () => {
+    console.log('Google signup clicked');
     setLoading(true);
     setError(null);
     try {
       await signInWithGoogle();
     } catch (err) {
+      console.error('Google signup error:', err);
       setError(err instanceof Error ? err.message : 'Failed to sign up with Google');
       setLoading(false);
     }
   };
 
   const handleFacebookSignup = async () => {
+    console.log('Facebook signup clicked');
     setLoading(true);
     setError(null);
     try {
       await signInWithFacebook();
     } catch (err) {
+      console.error('Facebook signup error:', err);
       setError(err instanceof Error ? err.message : 'Failed to sign up with Facebook');
       setLoading(false);
     }
