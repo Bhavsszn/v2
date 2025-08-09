@@ -33,7 +33,7 @@ DJFNDR is a specialized booking platform designed to bridge the gap between clie
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/djfndr.git
+git clone https://github.com/yourusername/v2.git
 cd djfndr
 ```
 
