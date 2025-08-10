@@ -16,7 +16,7 @@ export const mockDJs: DJ[] = [
       phone: '(515) 555-0123',
       facebook: 'https://facebook.com/djair'
     },
-    priceRange: '$150-200/hr'
+    priceRange: '$150-200/hr',
     pricing: {
       wedding: '$200/hr',
       corporate: '$175/hr',
@@ -40,7 +40,7 @@ export const mockDJs: DJ[] = [
       email: 'taylorg@example.com',
       phone: '(515) 555-0456'
     },
-    priceRange: '$200-300/hr'
+    priceRange: '$200-300/hr',
     pricing: {
       club: '$300/hr',
       festival: '$350/hr',
@@ -64,7 +64,7 @@ export const mockDJs: DJ[] = [
       email: 'djhenny@example.com',
       phone: '(515) 555-0789'
     },
-    priceRange: '$100-150/hr'
+    priceRange: '$100-150/hr',
     pricing: {
       wedding: '$150/hr',
       birthday: '$125/hr',
@@ -88,7 +88,7 @@ export const mockDJs: DJ[] = [
       email: 'djstorm@example.com',
       phone: '(402) 555-0123'
     },
-    priceRange: '$175-225/hr'
+    priceRange: '$175-225/hr',
     pricing: {
       corporate: '$225/hr',
       wedding: '$200/hr',
@@ -112,7 +112,7 @@ export const mockDJs: DJ[] = [
       email: 'djluna@example.com',
       phone: '(402) 555-0456'
     },
-    priceRange: '$125-175/hr'
+    priceRange: '$125-175/hr',
     pricing: {
       wedding: '$175/hr',
       'private-party': '$150/hr',
@@ -136,7 +136,7 @@ export const mockDJs: DJ[] = [
       email: 'djblaze@example.com',
       phone: '(402) 555-0789'
     },
-    priceRange: '$200-250/hr'
+    priceRange: '$200-250/hr',
     pricing: {
       club: '$250/hr',
       festival: '$300/hr',
