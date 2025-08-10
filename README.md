@@ -119,8 +119,11 @@ This project follows professional development standards with TypeScript for type
 Copyright 2025 DJFNDR, LLC. All rights reserved.
 
 ## Contact
-
+Djfndrhelp@gmail.com
 DJFNDR, LLC  
 307 W 24th St.  
 Kearney, NE 68845  
 www.djfndr.com
+
+## Account Deletion
+To delete your account, contact Djfndrhelp@gmail.com
