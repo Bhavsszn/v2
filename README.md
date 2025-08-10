@@ -127,3 +127,6 @@ www.djfndr.com
 
 ## Account Deletion
 To delete your account, contact Djfndrhelp@gmail.com
+
+## Privacy Policy
+https://www.privacypolicies.com/live/80d188a5-677e-472d-a239-9277ca2d87cd
