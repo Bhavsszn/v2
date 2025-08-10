@@ -1,10 +1,11 @@
 import React from 'react';
-import { ArrowLeft, Star, Phone, Mail, Facebook } from 'lucide-react';
+import { ArrowLeft, Star, Phone, Mail, Facebook, Share2, Copy, Check } from 'lucide-react';
 import { DJ, Review } from '../types';
 
 interface DJProfileProps {
   dj: DJ;
   reviews: Review[];
+  isSharedView?: boolean;
   onBack: () => void;
   onBook: (dj: DJ) => void;
 }
@@ -12,9 +13,44 @@ interface DJProfileProps {
 export const DJProfile: React.FC<DJProfileProps> = ({
   dj,
   reviews,
+  isSharedView = false,
   onBack,
   onBook
 }) => {
+  const [copied, setCopied] = React.useState(false);
+  const [selectedEventType, setSelectedEventType] = React.useState<string>('');
+  
+  const shareUrl = `${window.location.origin}/dj/${dj.id}`;
+  
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      // Fallback for browsers that don't support clipboard API
+      const textArea = document.createElement('textarea');
+      textArea.value = shareUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+  
+  const getEventTypePrice = (eventType: string) => {
+    if (!dj.pricing) return dj.priceRange;
+    const normalizedType = eventType.toLowerCase().replace(/\s+/g, '-');
+    return dj.pricing[normalizedType] || dj.priceRange;
+  };
+  
+  const eventTypes = dj.eventTypes.map(type => ({
+    name: type,
+    price: getEventTypePrice(type)
+  }));
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto p-4">
@@ -23,7 +59,7 @@ export const DJProfile: React.FC<DJProfileProps> = ({
           className="flex items-center text-gray-600 hover:text-gray-800 mb-6"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
-          Back to Results
+          {isSharedView ? 'Back to Home' : 'Back to Results'}
         </button>
 
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
@@ -40,6 +76,15 @@ export const DJProfile: React.FC<DJProfileProps> = ({
             <div className="flex justify-between items-start mb-6">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">{dj.name}</h1>
+                <div className="flex items-center space-x-2 mb-3">
+                  <div className="flex items-center">
+                    <Star className="w-5 h-5 text-yellow-400 fill-current" />
+                    <span className="ml-1 font-medium">{dj.rating}</span>
+                    <span className="ml-1 text-gray-500">({dj.reviewCount} reviews)</span>
+                  </div>
+                  <span className="text-gray-300">•</span>
+                  <span className="text-gray-600">{dj.location}</span>
+                </div>
                 <div className="flex items-center space-x-4 text-sm text-gray-600">
                   {dj.contact?.email && (
                     <div className="flex items-center">
@@ -62,9 +107,54 @@ export const DJProfile: React.FC<DJProfileProps> = ({
                 </div>
               </div>
 
-              <button className="bg-red-500 text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-red-600 transition-colors">
-                CONTACT
-              </button>
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={handleShare}
+                  className="flex items-center space-x-2 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="w-4 h-4" />
+                      <span>Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Share2 className="w-4 h-4" />
+                      <span>Share</span>
+                    </>
+                  )}
+                </button>
+                <button 
+                  onClick={() => onBook(dj)}
+                  className="bg-red-500 text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-red-600 transition-colors"
+                >
+                  BOOK NOW
+                </button>
+              </div>
+            </div>
+
+            {/* Bio Section */}
+            {dj.bio && (
+              <div className="mb-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-3">About {dj.name}</h2>
+                <p className="text-gray-700 leading-relaxed">{dj.bio}</p>
+              </div>
+            )}
+
+            {/* Event Types & Pricing */}
+            <div className="mb-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Event Types & Pricing</h2>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {eventTypes.map((event, index) => (
+                  <div 
+                    key={index}
+                    className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-red-300 transition-colors"
+                  >
+                    <h3 className="font-semibold text-gray-900 mb-1">{event.name}</h3>
+                    <p className="text-red-600 font-bold text-lg">{event.price}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
@@ -123,19 +213,31 @@ export const DJProfile: React.FC<DJProfileProps> = ({
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Event Type
                       </label>
-                      <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                        <option>Wedding</option>
-                        <option>Corporate Event</option>
-                        <option>Birthday Party</option>
-                        <option>Club Event</option>
-                        <option>Other</option>
+                      <select 
+                        value={selectedEventType}
+                        onChange={(e) => setSelectedEventType(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      >
+                        <option value="">Select event type</option>
+                        {eventTypes.map((event, index) => (
+                          <option key={index} value={event.name}>
+                            {event.name} - {event.price}
+                          </option>
+                        ))}
                       </select>
                     </div>
+                    {selectedEventType && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                        <p className="text-sm text-red-700">
+                          <strong>Price for {selectedEventType}:</strong> {getEventTypePrice(selectedEventType)}
+                        </p>
+                      </div>
+                    )}
                     <button
                       onClick={() => onBook(dj)}
                       className="w-full bg-red-500 text-white py-3 px-6 rounded-lg font-bold hover:bg-red-600 transition-colors"
                     >
-                      BOOK
+                      BOOK NOW
                     </button>
                   </div>
                 </div>

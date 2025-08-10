@@ -19,8 +19,9 @@ import { LoginPage } from './components/auth/LoginPage';
 import { SignupPage } from './components/auth/SignupPage';
 import { AuthCallback } from './components/auth/AuthCallback';
 import { useAuth } from './hooks/useAuth';
+import { mockDJs } from './data/mockData';
 
-type Screen = 'welcome' | 'search' | 'results' | 'profile' | 'dj-signup' | 'how-it-works' | 'products' | 'success' | 'login' | 'signup' | 'auth-callback';
+type Screen = 'welcome' | 'search' | 'results' | 'profile' | 'dj-signup' | 'how-it-works' | 'products' | 'success' | 'login' | 'signup' | 'auth-callback' | 'shared-profile';
 
 function App() {
   const { user, loading: authLoading } = useAuth();
@@ -38,6 +39,22 @@ function App() {
   // Check for auth callback on mount
   useEffect(() => {
     const hash = window.location.hash;
+    const path = window.location.pathname;
+    
+    // Handle shared DJ profile URLs like /dj/1
+    if (path.startsWith('/dj/')) {
+      const djId = path.split('/')[2];
+      if (djId) {
+        // Find the DJ from mock data
+        const dj = mockDJs.find(d => d.id === djId);
+        if (dj) {
+          setSelectedDJ(dj);
+          setCurrentScreen('shared-profile');
+          return;
+        }
+      }
+    }
+    
     if (hash.includes('access_token') || hash.includes('error')) {
       setCurrentScreen('auth-callback');
     }
@@ -122,6 +139,11 @@ function App() {
         break;
       case 'profile':
         setCurrentScreen('results');
+        break;
+      case 'shared-profile':
+        setCurrentScreen('welcome');
+        // Clear the URL
+        window.history.pushState({}, '', '/');
         break;
     }
   };
@@ -225,7 +247,7 @@ function App() {
         </>
       )}
 
-      {currentScreen === 'profile' && selectedDJ && (
+      {(currentScreen === 'profile' || currentScreen === 'shared-profile') && selectedDJ && (
         <>
           {reviewsLoading && <LoadingSpinner className="py-4" />}
           {reviewsError && (
@@ -237,6 +259,7 @@ function App() {
         <DJProfile
           dj={selectedDJ}
           reviews={reviews}
+          isSharedView={currentScreen === 'shared-profile'}
           onBack={handleBack}
           onBook={handleBook}
         />

@@ -17,6 +17,14 @@ export const mockDJs: DJ[] = [
       facebook: 'https://facebook.com/djair'
     },
     priceRange: '$150-200/hr'
+    pricing: {
+      wedding: '$200/hr',
+      corporate: '$175/hr',
+      'private-party': '$150/hr',
+      birthday: '$150/hr',
+      club: '$250/hr',
+      festival: '$300/hr'
+    }
   },
   {
     id: '2',
@@ -33,6 +41,14 @@ export const mockDJs: DJ[] = [
       phone: '(515) 555-0456'
     },
     priceRange: '$200-300/hr'
+    pricing: {
+      club: '$300/hr',
+      festival: '$350/hr',
+      'private-party': '$250/hr',
+      birthday: '$200/hr',
+      corporate: '$275/hr',
+      wedding: '$250/hr'
+    }
   },
   {
     id: '3',
@@ -49,6 +65,14 @@ export const mockDJs: DJ[] = [
       phone: '(515) 555-0789'
     },
     priceRange: '$100-150/hr'
+    pricing: {
+      wedding: '$150/hr',
+      birthday: '$125/hr',
+      anniversary: '$140/hr',
+      'private-party': '$130/hr',
+      corporate: '$160/hr',
+      club: '$180/hr'
+    }
   },
   {
     id: '4',
@@ -65,6 +89,14 @@ export const mockDJs: DJ[] = [
       phone: '(402) 555-0123'
     },
     priceRange: '$175-225/hr'
+    pricing: {
+      corporate: '$225/hr',
+      wedding: '$200/hr',
+      club: '$250/hr',
+      'private-party': '$175/hr',
+      birthday: '$175/hr',
+      festival: '$275/hr'
+    }
   },
   {
     id: '5',
@@ -81,6 +113,14 @@ export const mockDJs: DJ[] = [
       phone: '(402) 555-0456'
     },
     priceRange: '$125-175/hr'
+    pricing: {
+      wedding: '$175/hr',
+      'private-party': '$150/hr',
+      birthday: '$140/hr',
+      anniversary: '$160/hr',
+      corporate: '$170/hr',
+      club: '$180/hr'
+    }
   },
   {
     id: '6',
@@ -97,6 +137,14 @@ export const mockDJs: DJ[] = [
       phone: '(402) 555-0789'
     },
     priceRange: '$200-250/hr'
+    pricing: {
+      club: '$250/hr',
+      festival: '$300/hr',
+      corporate: '$225/hr',
+      'private-party': '$200/hr',
+      birthday: '$200/hr',
+      wedding: '$225/hr'
+    }
   }
 ];
 

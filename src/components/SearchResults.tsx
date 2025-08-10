@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Play, Star } from 'lucide-react';
+import { ArrowLeft, Share2, Star } from 'lucide-react';
 import { DJ, SearchFilters } from '../types';
 
 interface SearchResultsProps {
@@ -77,6 +77,9 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                       <p className="text-sm text-gray-600">
                         Event Types: {dj.eventTypes.join(', ')}
                       </p>
+                      <p className="text-sm font-medium text-red-600 mt-1">
+                        Starting at {dj.priceRange}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -86,8 +89,17 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                     {dj.availability}
                   </span>
                   
-                  <button className="p-2 text-gray-400 hover:text-gray-600">
-                    <Play className="w-6 h-6" />
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const shareUrl = `${window.location.origin}/dj/${dj.id}`;
+                      navigator.clipboard.writeText(shareUrl);
+                      alert('Profile link copied to clipboard!');
+                    }}
+                    className="p-2 text-gray-400 hover:text-gray-600"
+                    title="Share DJ Profile"
+                  >
+                    <Share2 className="w-5 h-5" />
                   </button>
                 </div>
               </div>

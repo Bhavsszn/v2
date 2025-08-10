@@ -14,6 +14,7 @@ export interface DJ {
     facebook?: string;
   };
   priceRange?: string;
+  pricing?: Record<string, string>;
 }
 
 export interface Review {
