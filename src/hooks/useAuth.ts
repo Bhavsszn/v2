@@ -31,6 +31,7 @@ export const useAuth = () => {
         email,
         password,
         options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
           data: {
             first_name: firstName,
             last_name: lastName || '',
@@ -48,6 +49,12 @@ export const useAuth = () => {
         throw error;
       }
       console.log('Signup successful:', data);
+      
+      // Show success message about email confirmation
+      if (data.user && !data.session) {
+        throw new Error('Account created successfully! Please check your email and click the confirmation link to complete your registration.');
+      }
+      
       return data;
     } catch (error: any) {
       console.error('Signup catch block:', error);

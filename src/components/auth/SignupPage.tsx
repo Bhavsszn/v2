@@ -66,6 +66,10 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onBack, onSwitchToLogin 
           // Don't fail the signup if image upload fails
         }
       }
+      
+      // Show success message
+      alert('Account created successfully! Please check your email and click the confirmation link to complete your registration.');
+      onSwitchToLogin();
     } catch (err) {
       console.error('Signup error in component:', err);
       setError(err instanceof Error ? err.message : 'Failed to create account');
