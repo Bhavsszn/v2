@@ -1,16 +1,3 @@
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
-
-export default function App() {
-  return (
-    <Elements stripe={stripePromise}>
-      {/* your existing app JSX */}
-    </Elements>
-  );
-}
-
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { WelcomeScreen } from './components/WelcomeScreen';
@@ -33,7 +20,24 @@ import { AuthCallback } from './components/auth/AuthCallback';
 import { useAuth } from './hooks/useAuth';
 import { mockDJs } from './data/mockData';
 
-type Screen = 'welcome' | 'search' | 'results' | 'profile' | 'dj-signup' | 'how-it-works' | 'products' | 'success' | 'login' | 'signup' | 'auth-callback' | 'shared-profile';
+// Stripe Elements (Payment Intents flow)
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY as string);
+
+type Screen =
+  | 'welcome'
+  | 'search'
+  | 'results'
+  | 'profile'
+  | 'dj-signup'
+  | 'how-it-works'
+  | 'success'
+  | 'login'
+  | 'signup'
+  | 'auth-callback'
+  | 'shared-profile';
 
 function App() {
   const { user, loading: authLoading } = useAuth();
@@ -42,23 +46,22 @@ function App() {
   const [selectedDJ, setSelectedDJ] = useState<DJ | null>(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
-  
+
   // Custom hooks for data management
   const { djs, loading: djsLoading, error: djsError, searchDJs } = useDJs();
   const { reviews, loading: reviewsLoading, error: reviewsError } = useReviews(selectedDJ?.id);
   const { loading: bookingLoading, error: bookingError, createBooking } = useBookings();
 
-  // Check for auth callback on mount
+  // Handle deep links and auth callbacks
   useEffect(() => {
     const hash = window.location.hash;
     const path = window.location.pathname;
-    
-    // Handle shared DJ profile URLs like /dj/1
+
+    // 1) Shared DJ profile: /dj/:id
     if (path.startsWith('/dj/')) {
       const djId = path.split('/')[2];
       if (djId) {
-        // Find the DJ from mock data
-        const dj = mockDJs.find(d => d.id === djId);
+        const dj = mockDJs.find((d) => d.id === djId);
         if (dj) {
           setSelectedDJ(dj);
           setCurrentScreen('shared-profile');
@@ -66,32 +69,24 @@ function App() {
         }
       }
     }
-    
+
+    // 2) Stripe success redirect
+    if (path === '/success') {
+      setCurrentScreen('success');
+      return;
+    }
+
+    // 3) Supabase OAuth callback
     if (hash.includes('access_token') || hash.includes('error')) {
       setCurrentScreen('auth-callback');
     }
   }, []);
 
-  const handleSearchByLocation = () => {
-    setCurrentScreen('search');
-  };
+  const handleSearchByLocation = () => setCurrentScreen('search');
+  const handleSearchByName = () => setCurrentScreen('search');
 
-  const handleSearchByName = () => {
-    // For now, redirect to location search
-    setCurrentScreen('search');
-  };
-
-  const handleDJSignup = () => {
-    setCurrentScreen('dj-signup');
-  };
-
-  const handleHowItWorks = () => {
-    setCurrentScreen('how-it-works');
-  };
-
-  const handleProducts = () => {
-    setCurrentScreen('products');
-  };
+  const handleDJSignup = () => setCurrentScreen('dj-signup');
+  const handleHowItWorks = () => setCurrentScreen('how-it-works');
 
   const handleLogin = () => {
     setAuthMode('login');
@@ -105,7 +100,6 @@ function App() {
 
   const handleAuthComplete = () => {
     setCurrentScreen('welcome');
-    // Clear URL hash
     window.history.replaceState(null, '', window.location.pathname);
   };
 
@@ -140,7 +134,6 @@ function App() {
       case 'search':
       case 'dj-signup':
       case 'how-it-works':
-      case 'products':
       case 'success':
       case 'login':
       case 'signup':
@@ -154,13 +147,11 @@ function App() {
         break;
       case 'shared-profile':
         setCurrentScreen('welcome');
-        // Clear the URL
         window.history.pushState({}, '', '/');
         break;
     }
   };
 
-  // Show loading spinner while checking auth state
   if (authLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -170,120 +161,102 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {currentScreen !== 'welcome' && (
-        <Header 
-          onDJSignup={handleDJSignup}
-          onHowItWorks={handleHowItWorks}
-          onProducts={handleProducts}
-          onLogin={handleLogin}
-          onSignup={handleSignup}
-        />
-      )}
-      
-      {currentScreen === 'welcome' && (
-        <WelcomeScreen
-          onSearchByLocation={handleSearchByLocation}
-          onSearchByName={handleSearchByName}
-          onDJSignup={handleDJSignup}
-          onHowItWorks={handleHowItWorks}
-          onProducts={handleProducts}
-        />
-      )}
+    <Elements stripe={stripePromise}>
+      <div className="min-h-screen bg-gray-50">
+        {currentScreen !== 'welcome' && (
+          <Header
+            onDJSignup={handleDJSignup}
+            onHowItWorks={handleHowItWorks}
+            onLogin={handleLogin}
+            onSignup={handleSignup}
+          />
+        )}
 
-      {currentScreen === 'dj-signup' && (
-        <DJSignupScreen onBack={handleBack} />
-      )}
+        {currentScreen === 'welcome' && (
+          <WelcomeScreen
+            onSearchByLocation={handleSearchByLocation}
+            onSearchByName={handleSearchByName}
+            onDJSignup={handleDJSignup}
+            onHowItWorks={handleHowItWorks}
+          />
+        )}
 
-      {currentScreen === 'how-it-works' && (
-        <HowItWorksScreen onBack={handleBack} />
-      )}
+        {currentScreen === 'dj-signup' && <DJSignupScreen onBack={handleBack} />}
 
-      {currentScreen === 'success' && (
-        <SuccessPage onBack={handleBack} />
-      )}
+        {currentScreen === 'how-it-works' && <HowItWorksScreen onBack={handleBack} />}
 
-      {currentScreen === 'login' && (
-        <LoginPage 
-          onBack={handleBack}
-          onSwitchToSignup={() => {
-            setAuthMode('signup');
-            setCurrentScreen('signup');
-          }}
-        />
-      )}
+        {currentScreen === 'success' && <SuccessPage onBack={handleBack} />}
 
-      {currentScreen === 'signup' && (
-        <SignupPage 
-          onBack={handleBack}
-          onSwitchToLogin={() => {
-            setAuthMode('login');
-            setCurrentScreen('login');
-          }}
-        />
-      )}
+        {currentScreen === 'login' && (
+          <LoginPage
+            onBack={handleBack}
+            onSwitchToSignup={() => {
+              setAuthMode('signup');
+              setCurrentScreen('signup');
+            }}
+          />
+        )}
 
-      {currentScreen === 'auth-callback' && (
-        <AuthCallback onComplete={handleAuthComplete} />
-      )}
+        {currentScreen === 'signup' && (
+          <SignupPage
+            onBack={handleBack}
+            onSwitchToLogin={() => {
+              setAuthMode('login');
+              setCurrentScreen('login');
+            }}
+          />
+        )}
 
-      {currentScreen === 'search' && (
-        <SearchScreen
-          onSearch={handleSearch}
-          onBack={handleBack}
-        />
-      )}
+        {currentScreen === 'auth-callback' && <AuthCallback onComplete={handleAuthComplete} />}
 
-      {currentScreen === 'results' && searchFilters && (
-        <>
-          {djsLoading && <LoadingSpinner className="py-8" />}
-          {djsError && (
-            <ErrorMessage 
-              message={djsError} 
-              onRetry={() => searchDJs(searchFilters)}
-              className="mx-4"
+        {currentScreen === 'search' && <SearchScreen onSearch={handleSearch} onBack={handleBack} />}
+
+        {currentScreen === 'results' && searchFilters && (
+          <>
+            {djsLoading && <LoadingSpinner className="py-8" />}
+            {djsError && (
+              <ErrorMessage
+                message={djsError}
+                onRetry={() => searchDJs(searchFilters)}
+                className="mx-4"
+              />
+            )}
+            {!djsLoading && !djsError && (
+              <SearchResults
+                djs={djs}
+                filters={searchFilters}
+                onBack={handleBack}
+                onSelectDJ={handleSelectDJ}
+              />
+            )}
+          </>
+        )}
+
+        {(currentScreen === 'profile' || currentScreen === 'shared-profile') && selectedDJ && (
+          <>
+            {reviewsLoading && <LoadingSpinner className="py-4" />}
+            {reviewsError && <ErrorMessage message={reviewsError} className="mx-4 mb-4" />}
+            <DJProfile
+              dj={selectedDJ}
+              reviews={reviews}
+              isSharedView={currentScreen === 'shared-profile'}
+              onBack={handleBack}
+              onBook={handleBook}
             />
-          )}
-          {!djsLoading && !djsError && (
-        <SearchResults
-          djs={djs}
-          filters={searchFilters}
-          onBack={handleBack}
-          onSelectDJ={handleSelectDJ}
-        />
-          )}
-        </>
-      )}
+          </>
+        )}
 
-      {(currentScreen === 'profile' || currentScreen === 'shared-profile') && selectedDJ && (
-        <>
-          {reviewsLoading && <LoadingSpinner className="py-4" />}
-          {reviewsError && (
-            <ErrorMessage 
-              message={reviewsError}
-              className="mx-4 mb-4"
-            />
-          )}
-        <DJProfile
-          dj={selectedDJ}
-          reviews={reviews}
-          isSharedView={currentScreen === 'shared-profile'}
-          onBack={handleBack}
-          onBook={handleBook}
-        />
-        </>
-      )}
-
-      {showBookingModal && selectedDJ && (
-        <BookingModal
-          dj={selectedDJ}
-          isOpen={showBookingModal}
-          loading={bookingLoading}
-          onClose={() => setShowBookingModal(false)}
-          onConfirm={handleBookingConfirm}
-        />
-      )}
-    </div>
+        {showBookingModal && selectedDJ && (
+          <BookingModal
+            dj={selectedDJ}
+            isOpen={showBookingModal}
+            loading={bookingLoading}
+            onClose={() => setShowBookingModal(false)}
+            onConfirm={handleBookingConfirm}
+          />
+        )}
+      </div>
+    </Elements>
   );
 }
 
