@@ -6,7 +6,6 @@ interface WelcomeScreenProps {
   onSearchByName: () => void;
   onDJSignup: () => void;
   onHowItWorks: () => void;
-  onProducts: () => void;
 }
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
@@ -14,7 +13,6 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   onSearchByName,
   onDJSignup,
   onHowItWorks,
-  onProducts
 }) => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -35,26 +33,19 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           <p className="text-gray-700 font-medium mb-4">
             How would you like to search?
           </p>
-          
+
           <button
             onClick={onSearchByLocation}
             className="w-full bg-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
           >
             By Location
           </button>
-          
+
           <button
             onClick={onSearchByName}
             className="w-full bg-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
           >
             By Name
-          </button>
-          
-          <button
-            onClick={onProducts}
-            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-          >
-            Audio Services
           </button>
         </div>
 
