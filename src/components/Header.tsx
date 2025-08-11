@@ -42,10 +42,6 @@ export const Header: React.FC<HeaderProps> = ({
           
           <nav className="hidden md:flex items-center space-x-8">
             <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Find DJs</a>
-            <button 
-              onClick={onProducts}
-              className="text-gray-700 hover:text-gray-900 font-medium"
-            >
               Services
             </button>
             <button 
