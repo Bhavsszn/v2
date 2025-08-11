@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { X, Calendar, MapPin, Clock, DollarSign } from 'lucide-react';
 import { DJ } from '../types';
+import { useStripe } from '../hooks/useStripe';
+import { useAuth } from '../hooks/useAuth';
 
 interface BookingModalProps {
   dj: DJ;
@@ -17,6 +19,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   onClose,
   onConfirm
 }) => {
+  const { user } = useAuth();
+  const { createCheckoutSession, loading: stripeLoading } = useStripe();
   const [formData, setFormData] = useState({
     eventDate: '',
     eventTime: '',
@@ -27,12 +31,35 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     specialRequests: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onConfirm({
-      dj,
-      ...formData
-    });
+    
+    if (!user) {
+      alert('Please sign in to book a DJ');
+      return;
+    }
+
+    if (!formData.eventType) {
+      alert('Please select an event type');
+      return;
+    }
+
+    // Get the Stripe price ID for the selected event type
+    const normalizedEventType = formData.eventType.toLowerCase().replace(/\s+/g, '-');
+    const priceId = dj.pricingIds?.[normalizedEventType];
+
+    if (!priceId) {
+      alert('Pricing not available for this event type. Please contact the DJ directly.');
+      return;
+    }
+
+    try {
+      // Create Stripe checkout session
+      await createCheckoutSession(priceId, 'payment');
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Failed to start checkout process. Please try again.');
+    }
   };
 
   if (!isOpen) return null;
@@ -90,12 +117,16 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               onChange={(e) => setFormData({ ...formData, eventType: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
             >
-              <option value="wedding">Wedding</option>
-              <option value="corporate">Corporate Event</option>
-              <option value="birthday">Birthday Party</option>
-              <option value="club">Club Event</option>
-              <option value="prom">Prom</option>
-              <option value="other">Other</option>
+              <option value="">Select event type</option>
+              {dj.eventTypes.map((eventType) => {
+                const normalizedType = eventType.toLowerCase().replace(/\s+/g, '-');
+                const price = dj.pricing?.[normalizedType] || dj.priceRange;
+                return (
+                  <option key={eventType} value={eventType}>
+                    {eventType} - {price}
+                  </option>
+                );
+              })}
             </select>
           </div>
 
@@ -171,10 +202,10 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             </button>
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || stripeLoading || !formData.eventType}
               className="flex-1 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-semibold"
             >
-              {loading ? 'Sending...' : 'Send Booking Request'}
+              {loading || stripeLoading ? 'Processing...' : 'Pay & Book DJ'}
             </button>
           </div>
         </form>

@@ -1,22 +1,6 @@
 import { DJ, Review } from '../types';
+import { STRIPE_CONFIG } from '../stripe-config';
 
-/**
- * Replace these placeholders with your real Stripe Price IDs after you
- * create Products/Prices in the Stripe Dashboard (one-time, one per event type).
- *
- * Example:
- *  - Wedding product → price_1XYZ...
- *  - Corporate product → price_1ABC...
- */
-export const PRICE_IDS = {
-  wedding: 'price_WEDDING_REPLACE_ME',
-  corporate: 'price_CORPORATE_REPLACE_ME',
-  privateParty: 'price_PRIVATE_PARTY_REPLACE_ME',
-  birthday: 'price_BIRTHDAY_REPLACE_ME',
-  club: 'price_CLUB_REPLACE_ME',
-  festival: 'price_FESTIVAL_REPLACE_ME',
-  anniversary: 'price_ANNIVERSARY_REPLACE_ME',
-};
 
 export const mockDJs: DJ[] = [
   {
@@ -45,12 +29,12 @@ export const mockDJs: DJ[] = [
       festival: '$300/hr',
     },
     pricingIds: {
-      wedding: PRICE_IDS.wedding,
-      corporate: PRICE_IDS.corporate,
-      'private-party': PRICE_IDS.privateParty,
-      birthday: PRICE_IDS.birthday,
-      club: PRICE_IDS.club,
-      festival: PRICE_IDS.festival,
+      wedding: STRIPE_CONFIG.PRICE_IDS.wedding,
+      corporate: STRIPE_CONFIG.PRICE_IDS.corporate,
+      'private-party': STRIPE_CONFIG.PRICE_IDS['private-party'],
+      birthday: STRIPE_CONFIG.PRICE_IDS.birthday,
+      club: STRIPE_CONFIG.PRICE_IDS.club,
+      festival: STRIPE_CONFIG.PRICE_IDS.festival,
     },
   },
   {
@@ -78,12 +62,12 @@ export const mockDJs: DJ[] = [
       wedding: '$250/hr',
     },
     pricingIds: {
-      club: PRICE_IDS.club,
-      festival: PRICE_IDS.festival,
-      'private-party': PRICE_IDS.privateParty,
-      birthday: PRICE_IDS.birthday,
-      corporate: PRICE_IDS.corporate,
-      wedding: PRICE_IDS.wedding,
+      club: STRIPE_CONFIG.PRICE_IDS.club,
+      festival: STRIPE_CONFIG.PRICE_IDS.festival,
+      corporate: STRIPE_CONFIG.PRICE_IDS.corporate,
+      'private-party': STRIPE_CONFIG.PRICE_IDS['private-party'],
+      birthday: STRIPE_CONFIG.PRICE_IDS.birthday,
+      wedding: STRIPE_CONFIG.PRICE_IDS.wedding,
     },
   },
   {
@@ -111,12 +95,12 @@ export const mockDJs: DJ[] = [
       club: '$180/hr',
     },
     pricingIds: {
-      wedding: PRICE_IDS.wedding,
-      birthday: PRICE_IDS.birthday,
-      anniversary: PRICE_IDS.anniversary,
-      'private-party': PRICE_IDS.privateParty,
-      corporate: PRICE_IDS.corporate,
-      club: PRICE_IDS.club,
+      wedding: STRIPE_CONFIG.PRICE_IDS.wedding,
+      birthday: STRIPE_CONFIG.PRICE_IDS.birthday,
+      anniversary: STRIPE_CONFIG.PRICE_IDS.anniversary,
+      'private-party': STRIPE_CONFIG.PRICE_IDS['private-party'],
+      corporate: STRIPE_CONFIG.PRICE_IDS.corporate,
+      club: STRIPE_CONFIG.PRICE_IDS.club,
     },
   },
   {
@@ -144,12 +128,12 @@ export const mockDJs: DJ[] = [
       festival: '$275/hr',
     },
     pricingIds: {
-      corporate: PRICE_IDS.corporate,
-      wedding: PRICE_IDS.wedding,
-      club: PRICE_IDS.club,
-      'private-party': PRICE_IDS.privateParty,
-      birthday: PRICE_IDS.birthday,
-      festival: PRICE_IDS.festival,
+      corporate: STRIPE_CONFIG.PRICE_IDS.corporate,
+      wedding: STRIPE_CONFIG.PRICE_IDS.wedding,
+      club: STRIPE_CONFIG.PRICE_IDS.club,
+      'private-party': STRIPE_CONFIG.PRICE_IDS['private-party'],
+      birthday: STRIPE_CONFIG.PRICE_IDS.birthday,
+      festival: STRIPE_CONFIG.PRICE_IDS.festival,
     },
   },
   {
@@ -177,12 +161,12 @@ export const mockDJs: DJ[] = [
       club: '$180/hr',
     },
     pricingIds: {
-      wedding: PRICE_IDS.wedding,
-      'private-party': PRICE_IDS.privateParty,
-      birthday: PRICE_IDS.birthday,
-      anniversary: PRICE_IDS.anniversary,
-      corporate: PRICE_IDS.corporate,
-      club: PRICE_IDS.club,
+      wedding: STRIPE_CONFIG.PRICE_IDS.wedding,
+      'private-party': STRIPE_CONFIG.PRICE_IDS['private-party'],
+      birthday: STRIPE_CONFIG.PRICE_IDS.birthday,
+      anniversary: STRIPE_CONFIG.PRICE_IDS.anniversary,
+      corporate: STRIPE_CONFIG.PRICE_IDS.corporate,
+      club: STRIPE_CONFIG.PRICE_IDS.club,
     },
   },
   {
@@ -210,12 +194,12 @@ export const mockDJs: DJ[] = [
       wedding: '$225/hr',
     },
     pricingIds: {
-      club: PRICE_IDS.club,
-      festival: PRICE_IDS.festival,
-      corporate: PRICE_IDS.corporate,
-      'private-party': PRICE_IDS.privateParty,
-      birthday: PRICE_IDS.birthday,
-      wedding: PRICE_IDS.wedding,
+      club: STRIPE_CONFIG.PRICE_IDS.club,
+      festival: STRIPE_CONFIG.PRICE_IDS.festival,
+      corporate: STRIPE_CONFIG.PRICE_IDS.corporate,
+      'private-party': STRIPE_CONFIG.PRICE_IDS['private-party'],
+      birthday: STRIPE_CONFIG.PRICE_IDS.birthday,
+      wedding: STRIPE_CONFIG.PRICE_IDS.wedding,
     },
   },
 ];
