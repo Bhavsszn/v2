@@ -6,18 +6,16 @@ interface HeaderProps {
   onMenuClick?: () => void;
   onDJSignup?: () => void;
   onHowItWorks?: () => void;
-  onProducts?: () => void;
   onLogin?: () => void;
   onSignup?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ 
-  onMenuClick, 
-  onDJSignup, 
-  onHowItWorks, 
-  onProducts,
+export const Header: React.FC<HeaderProps> = ({
+  onMenuClick,
+  onDJSignup,
+  onHowItWorks,
   onLogin,
-  onSignup
+  onSignup,
 }) => {
   const { user, signOut } = useAuth();
 
@@ -39,18 +37,16 @@ export const Header: React.FC<HeaderProps> = ({
               <h1 className="text-2xl font-bold text-gray-900">DJFNDR</h1>
             </div>
           </div>
-          
+
           <nav className="hidden md:flex items-center space-x-8">
             <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Find DJs</a>
-              Services
-            </button>
-            <button 
+            <button
               onClick={onHowItWorks}
               className="text-gray-700 hover:text-gray-900 font-medium"
             >
               How it Works
             </button>
-            <button 
+            <button
               onClick={onDJSignup}
               className="text-gray-700 hover:text-gray-900 font-medium"
             >
@@ -63,7 +59,9 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                   <User className="w-5 h-5 text-gray-500" />
-                  <span className="text-sm text-gray-700">{user.user_metadata?.name || user.email}</span>
+                  <span className="text-sm text-gray-700">
+                    {user.user_metadata?.name || user.email}
+                  </span>
                 </div>
                 <button
                   onClick={handleSignOut}
@@ -75,13 +73,13 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             ) : (
               <>
-                <button 
+                <button
                   onClick={onLogin}
                   className="text-gray-700 hover:text-gray-900 font-medium"
                 >
                   Sign In
                 </button>
-                <button 
+                <button
                   onClick={onSignup}
                   className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
                 >
@@ -89,10 +87,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               </>
             )}
-            <button 
-              className="md:hidden p-2"
-              onClick={onMenuClick}
-            >
+            <button className="md:hidden p-2" onClick={onMenuClick}>
               <Menu className="h-6 w-6" />
             </button>
           </div>
