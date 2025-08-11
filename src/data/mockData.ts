@@ -196,6 +196,96 @@ export const mockDJs: DJ[] = [
   }
 ];
 
+
 export const mockReviews: Review[] = [
-  // ...unchanged review objects...
+  {
+    id: '1',
+    djId: '1',
+    clientName: 'Sarah Johnson',
+    rating: 5,
+    comment: 'DJ Air was absolutely amazing at our wedding! He kept everyone dancing all night and was so professional.',
+    date: '2024-01-15',
+    verified: true
+  },
+  {
+    id: '2',
+    djId: '1',
+    clientName: 'Mike Chen',
+    rating: 5,
+    comment: 'Perfect for our corporate event. Great music selection and very responsive to our requests.',
+    date: '2024-01-08',
+    verified: true
+  },
+  {
+    id: '3',
+    djId: '1',
+    clientName: 'Emily Davis',
+    rating: 4,
+    comment: 'Good DJ, arrived on time and had great equipment. Music was exactly what we wanted.',
+    date: '2023-12-22',
+    verified: true
+  },
+  {
+    id: '4',
+    djId: '2',
+    clientName: 'Alex Rodriguez',
+    rating: 5,
+    comment: 'DJ Taylor G brought incredible energy to our club event. The crowd loved every minute!',
+    date: '2024-01-20',
+    verified: true
+  },
+  {
+    id: '5',
+    djId: '2',
+    clientName: 'Jessica Kim',
+    rating: 5,
+    comment: 'Amazing performance at our private party. Great song selection and perfect timing.',
+    date: '2024-01-12',
+    verified: true
+  },
+  {
+    id: '6',
+    djId: '3',
+    clientName: 'David Wilson',
+    rating: 5,
+    comment: 'DJ Henny made our anniversary celebration perfect. So professional and accommodating.',
+    date: '2024-01-18',
+    verified: true
+  },
+  {
+    id: '7',
+    djId: '3',
+    clientName: 'Lisa Thompson',
+    rating: 4,
+    comment: 'Great DJ for our birthday party. Kids and adults both had a blast!',
+    date: '2024-01-05',
+    verified: true
+  },
+  {
+    id: '8',
+    djId: '4',
+    clientName: 'Robert Martinez',
+    rating: 5,
+    comment: 'DJ Storm delivered an outstanding performance at our corporate gala. Highly recommended!',
+    date: '2024-01-25',
+    verified: true
+  },
+  {
+    id: '9',
+    djId: '5',
+    clientName: 'Amanda Foster',
+    rating: 5,
+    comment: 'DJ Luna created the perfect atmosphere for our wedding. Elegant and professional.',
+    date: '2024-01-30',
+    verified: true
+  },
+  {
+    id: '10',
+    djId: '6',
+    clientName: 'Chris Johnson',
+    rating: 4,
+    comment: 'DJ Blaze brought serious energy to our festival. The crowd was pumped all night!',
+    date: '2024-02-02',
+    verified: true
+  }
 ];
