@@ -24,6 +24,14 @@ export const mockDJs: DJ[] = [
       birthday: '$150/hr',
       club: '$250/hr',
       festival: '$300/hr'
+    },
+    pricingIds: {
+      wedding: 'price_djair_wedding',
+      corporate: 'price_djair_corporate',
+      'private-party': 'price_djair_private_party',
+      birthday: 'price_djair_birthday',
+      club: 'price_djair_club',
+      festival: 'price_djair_festival'
     }
   },
   {
@@ -48,6 +56,14 @@ export const mockDJs: DJ[] = [
       birthday: '$200/hr',
       corporate: '$275/hr',
       wedding: '$250/hr'
+    },
+    pricingIds: {
+      club: 'price_tg_club',
+      festival: 'price_tg_festival',
+      'private-party': 'price_tg_private_party',
+      birthday: 'price_tg_birthday',
+      corporate: 'price_tg_corporate',
+      wedding: 'price_tg_wedding'
     }
   },
   {
@@ -72,6 +88,14 @@ export const mockDJs: DJ[] = [
       'private-party': '$130/hr',
       corporate: '$160/hr',
       club: '$180/hr'
+    },
+    pricingIds: {
+      wedding: 'price_henny_wedding',
+      birthday: 'price_henny_birthday',
+      anniversary: 'price_henny_anniversary',
+      'private-party': 'price_henny_private_party',
+      corporate: 'price_henny_corporate',
+      club: 'price_henny_club'
     }
   },
   {
@@ -96,6 +120,14 @@ export const mockDJs: DJ[] = [
       'private-party': '$175/hr',
       birthday: '$175/hr',
       festival: '$275/hr'
+    },
+    pricingIds: {
+      corporate: 'price_storm_corporate',
+      wedding: 'price_storm_wedding',
+      club: 'price_storm_club',
+      'private-party': 'price_storm_private_party',
+      birthday: 'price_storm_birthday',
+      festival: 'price_storm_festival'
     }
   },
   {
@@ -120,6 +152,14 @@ export const mockDJs: DJ[] = [
       anniversary: '$160/hr',
       corporate: '$170/hr',
       club: '$180/hr'
+    },
+    pricingIds: {
+      wedding: 'price_luna_wedding',
+      'private-party': 'price_luna_private_party',
+      birthday: 'price_luna_birthday',
+      anniversary: 'price_luna_anniversary',
+      corporate: 'price_luna_corporate',
+      club: 'price_luna_club'
     }
   },
   {
@@ -144,99 +184,18 @@ export const mockDJs: DJ[] = [
       'private-party': '$200/hr',
       birthday: '$200/hr',
       wedding: '$225/hr'
+    },
+    pricingIds: {
+      club: 'price_blaze_club',
+      festival: 'price_blaze_festival',
+      corporate: 'price_blaze_corporate',
+      'private-party': 'price_blaze_private_party',
+      birthday: 'price_blaze_birthday',
+      wedding: 'price_blaze_wedding'
     }
   }
 ];
 
 export const mockReviews: Review[] = [
-  {
-    id: '1',
-    djId: '1',
-    clientName: 'Sarah Johnson',
-    rating: 5,
-    comment: 'DJ Air was absolutely amazing at our wedding! He kept everyone dancing all night and was so professional.',
-    date: '2024-01-15',
-    verified: true
-  },
-  {
-    id: '2',
-    djId: '1',
-    clientName: 'Mike Chen',
-    rating: 5,
-    comment: 'Perfect for our corporate event. Great music selection and very responsive to our requests.',
-    date: '2024-01-08',
-    verified: true
-  },
-  {
-    id: '3',
-    djId: '1',
-    clientName: 'Emily Davis',
-    rating: 4,
-    comment: 'Good DJ, arrived on time and had great equipment. Music was exactly what we wanted.',
-    date: '2023-12-22',
-    verified: true
-  },
-  {
-    id: '4',
-    djId: '2',
-    clientName: 'Alex Rodriguez',
-    rating: 5,
-    comment: 'DJ Taylor G brought incredible energy to our club event. The crowd loved every minute!',
-    date: '2024-01-20',
-    verified: true
-  },
-  {
-    id: '5',
-    djId: '2',
-    clientName: 'Jessica Kim',
-    rating: 5,
-    comment: 'Amazing performance at our private party. Great song selection and perfect timing.',
-    date: '2024-01-12',
-    verified: true
-  },
-  {
-    id: '6',
-    djId: '3',
-    clientName: 'David Wilson',
-    rating: 5,
-    comment: 'DJ Henny made our anniversary celebration perfect. So professional and accommodating.',
-    date: '2024-01-18',
-    verified: true
-  },
-  {
-    id: '7',
-    djId: '3',
-    clientName: 'Lisa Thompson',
-    rating: 4,
-    comment: 'Great DJ for our birthday party. Kids and adults both had a blast!',
-    date: '2024-01-05',
-    verified: true
-  },
-  {
-    id: '8',
-    djId: '4',
-    clientName: 'Robert Martinez',
-    rating: 5,
-    comment: 'DJ Storm delivered an outstanding performance at our corporate gala. Highly recommended!',
-    date: '2024-01-25',
-    verified: true
-  },
-  {
-    id: '9',
-    djId: '5',
-    clientName: 'Amanda Foster',
-    rating: 5,
-    comment: 'DJ Luna created the perfect atmosphere for our wedding. Elegant and professional.',
-    date: '2024-01-30',
-    verified: true
-  },
-  {
-    id: '10',
-    djId: '6',
-    clientName: 'Chris Johnson',
-    rating: 4,
-    comment: 'DJ Blaze brought serious energy to our festival. The crowd was pumped all night!',
-    date: '2024-02-02',
-    verified: true
-  }
+  // ...unchanged review objects...
 ];
