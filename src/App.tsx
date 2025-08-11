@@ -13,7 +13,6 @@ import { useBookings } from './hooks/useBookings';
 import { DJ, SearchFilters } from './types';
 import { DJSignupScreen } from './components/DJSignupScreen';
 import { HowItWorksScreen } from './components/HowItWorksScreen';
-import { ProductsPage } from './components/ProductsPage';
 import { SuccessPage } from './components/SuccessPage';
 import { LoginPage } from './components/auth/LoginPage';
 import { SignupPage } from './components/auth/SignupPage';
@@ -185,10 +184,6 @@ function App() {
 
       {currentScreen === 'how-it-works' && (
         <HowItWorksScreen onBack={handleBack} />
-      )}
-
-      {currentScreen === 'products' && (
-        <ProductsPage onBack={handleBack} />
       )}
 
       {currentScreen === 'success' && (
