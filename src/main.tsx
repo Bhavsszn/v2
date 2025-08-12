@@ -1,4 +1,6 @@
 // src/main.tsx
+console.log('Stripe PK length:', String(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ?? '').length);
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
