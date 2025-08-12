@@ -1,8 +1,8 @@
 // src/components/BookingModal.tsx
 import React from 'react';
-import { X, Calendar, MapPin, Clock } from 'lucide-react';
+import { X, Calendar, MapPin } from 'lucide-react';
 import { DJ } from '../types';
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { supabase } from '../lib/supabase';
 
 interface BookingModalProps {
@@ -10,7 +10,7 @@ interface BookingModalProps {
   isOpen: boolean;
   loading?: boolean;
   onClose: () => void;
-  onConfirm?: (details: any) => void; // optional: if you still store bookings
+  onConfirm?: (details: any) => void;
 }
 
 export const BookingModal: React.FC<BookingModalProps> = ({
@@ -36,23 +36,57 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   const norm = (s: string) => s.toLowerCase().replace(/\s+/g, '-');
 
+  // Fallback fixed prices (in cents) if the dj.pricing text isn't parseable/present)
+  const FALLBACK_AMOUNTS: Record<string, number> = {
+    wedding: 120000,        // $1,200
+    corporate: 100000,      // $1,000
+    'private-party': 75000, // $750
+    birthday: 60000,        // $600
+    club: 150000,           // $1,500
+    festival: 200000,       // $2,000
+    anniversary: 80000,     // $800
+  };
+
+  // Try to parse something like "$200/hr" → 20000 cents
+  const priceTextToCents = (text?: string): number | null => {
+    if (!text) return null;
+    const m = text.match(/([\d,.]+)/); // grab "200" or "1,200"
+    if (!m) return null;
+    const dollars = parseFloat(m[1].replace(/,/g, ''));
+    if (Number.isNaN(dollars)) return null;
+    // If your text is hourly, you can convert to a flat fee; for now treat it as $X total
+    return Math.round(dollars * 100);
+  };
+
+  const resolveAmountCents = (eventType: string): number | null => {
+    const key = norm(eventType);
+    // Prefer explicit display pricing if you want to tie to that
+    const display = dj.pricing?.[key]; // e.g., "$200/hr"
+    const parsed = priceTextToCents(display);
+    if (parsed && parsed > 0) return parsed;
+
+    // Otherwise use sensible defaults
+    return FALLBACK_AMOUNTS[key] ?? null;
+  };
+
   const handlePayAndBook = async () => {
-    if (!stripe || !elements) return; // Stripe.js not yet loaded
+    if (!stripe || !elements) return;
 
     const eventType = selectedEventType || dj.eventTypes?.[0] || '';
-    const priceId = dj.pricingIds?.[norm(eventType)];
+    const amount = resolveAmountCents(eventType);
 
-    if (!priceId) {
-      alert('Payment is not configured for this event type yet.');
+    if (!amount) {
+      alert('Price not configured for this event type yet.');
       return;
     }
 
     setSubmitting(true);
     try {
-      // 1) Ask your Edge Function to create a PaymentIntent (amount pulled from Stripe Price)
+      // 1) Ask server for a PaymentIntent client_secret with a direct amount
       const { data, error } = await supabase.functions.invoke('create-payment-intent', {
         body: {
-          price_id: priceId,
+          amount,           // <-- cents
+          currency: 'usd',
           metadata: {
             djId: dj.id,
             djName: dj.name,
@@ -66,12 +100,12 @@ export const BookingModal: React.FC<BookingModalProps> = ({
       });
 
       if (error || !data?.client_secret) {
-        console.error('PI create error:', error);
+        console.error('create-payment-intent error:', error);
         alert('Failed to start payment. Please try again.');
         return;
       }
 
-      // 2) Confirm payment with card input
+      // 2) Confirm payment with the card
       const card = elements.getElement(CardElement);
       if (!card) {
         alert('Payment form not ready. Please try again.');
@@ -81,20 +115,17 @@ export const BookingModal: React.FC<BookingModalProps> = ({
       const result = await stripe.confirmCardPayment(data.client_secret, {
         payment_method: {
           card,
-          billing_details: {
-            // You can add a name/email field to your form if you want richer receipts
-          },
+          // Optionally add billing_details: { name, email }
         },
       });
 
       if (result.error) {
         console.error('confirmCardPayment error:', result.error);
-        alert(result.error.message || 'Payment failed. Please try another card.');
+        alert(result.error.message || 'Payment failed. Try another card.');
         return;
       }
 
       if (result.paymentIntent?.status === 'succeeded') {
-        // Optional: persist booking details in your DB
         onConfirm?.({
           djId: dj.id,
           eventType,
@@ -104,9 +135,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
           budget,
           notes,
           paymentIntentId: result.paymentIntent.id,
+          amount,
         });
-
-        // Redirect to success page (or close + show toast)
         window.location.href = '/success';
       }
     } catch (e: any) {
@@ -140,10 +170,19 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             >
               {dj.eventTypes?.map((et) => (
                 <option key={et} value={et}>
-                  {et} {dj.pricing?.[norm(et)] ? `- ${dj.pricing[norm(et)]}` : ''}
+                  {et}
+                  {dj.pricing?.[norm(et)] ? ` - ${dj.pricing[norm(et)]}` : ''}
                 </option>
               ))}
             </select>
+            {/* Show the computed charge */}
+            <p className="mt-1 text-xs text-gray-500">
+              You will be charged:{' '}
+              {(() => {
+                const amount = resolveAmountCents(selectedEventType || dj.eventTypes?.[0] || '');
+                return amount ? `$${(amount / 100).toFixed(2)}` : 'N/A';
+              })()}
+            </p>
           </div>
 
           {/* Date */}
@@ -175,7 +214,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             </div>
           </div>
 
-          {/* Guests + Budget */}
+          {/* Guests / Budget / Notes (unchanged) */}
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium">Expected Guest Count</label>
@@ -202,7 +241,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             </div>
           </div>
 
-          {/* Notes */}
           <div>
             <label className="mb-1 block text-sm font-medium">Special Requests or Notes</label>
             <textarea
@@ -213,7 +251,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             />
           </div>
 
-          {/* Card input */}
+          {/* Stripe card input */}
           <div>
             <label className="mb-1 block text-sm font-medium">Payment</label>
             <div className="rounded-lg border p-3">
