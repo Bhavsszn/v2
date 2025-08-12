@@ -6,7 +6,7 @@ import './index.css';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 
-const pk = (import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ?? '').trim();
+const pk=pk_test_51OjlJYAk57lRlYLjyo5yzJhORdHrBYKpEczIx8qRdbuhizgNSSqwWccmkz2g78IZ3XnBWTA9yNt3qxyKNW7lflpS00BWl9abPc
 
 // Hard fail in dev if the key is missing so you notice immediately
 if (!pk) {
