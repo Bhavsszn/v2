@@ -4,7 +4,6 @@ import { useAuth } from '../hooks/useAuth';
 
 interface HeaderProps {
   onMenuClick?: () => void;
-  onDJSignup?: () => void;
   onHowItWorks?: () => void;
   onLogin?: () => void;
   onSignup?: () => void;
@@ -12,7 +11,6 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({
   onMenuClick,
-  onDJSignup,
   onHowItWorks,
   onLogin,
   onSignup,
@@ -45,12 +43,6 @@ export const Header: React.FC<HeaderProps> = ({
               className="text-gray-700 hover:text-gray-900 font-medium"
             >
               How it Works
-            </button>
-            <button
-              onClick={onDJSignup}
-              className="text-gray-700 hover:text-gray-900 font-medium"
-            >
-              For DJs
             </button>
           </nav>
 

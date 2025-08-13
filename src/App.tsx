@@ -26,7 +26,6 @@ type Screen =
   | 'search'
   | 'results'
   | 'profile'
-  | 'dj-signup'
   | 'how-it-works'
   | 'success'
   | 'login'
@@ -77,9 +76,6 @@ function App() {
   }, []);
 
   const handleSearchByLocation = () => setCurrentScreen('search');
-  const handleSearchByName = () => setCurrentScreen('search');
-
-  const handleDJSignup = () => setCurrentScreen('dj-signup');
   const handleHowItWorks = () => setCurrentScreen('how-it-works');
 
   const handleLogin = () => {
@@ -126,7 +122,6 @@ function App() {
   const handleBack = () => {
     switch (currentScreen) {
       case 'search':
-      case 'dj-signup':
       case 'how-it-works':
       case 'success':
       case 'login':
@@ -158,7 +153,6 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       {currentScreen !== 'welcome' && (
         <Header
-          onDJSignup={handleDJSignup}
           onHowItWorks={handleHowItWorks}
           onLogin={handleLogin}
           onSignup={handleSignup}
@@ -168,13 +162,9 @@ function App() {
       {currentScreen === 'welcome' && (
         <WelcomeScreen
           onSearchByLocation={handleSearchByLocation}
-          onSearchByName={handleSearchByName}
-          onDJSignup={handleDJSignup}
           onHowItWorks={handleHowItWorks}
         />
       )}
-
-      {currentScreen === 'dj-signup' && <DJSignupScreen onBack={handleBack} />}
 
       {currentScreen === 'how-it-works' && <HowItWorksScreen onBack={handleBack} />}
 

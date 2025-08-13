@@ -3,15 +3,11 @@ import { MapPin } from 'lucide-react';
 
 interface WelcomeScreenProps {
   onSearchByLocation: () => void;
-  onSearchByName: () => void;
-  onDJSignup: () => void;
   onHowItWorks: () => void;
 }
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   onSearchByLocation,
-  onSearchByName,
-  onDJSignup,
   onHowItWorks,
 }) => {
   return (
@@ -30,35 +26,15 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         </div>
 
         <div className="space-y-4">
-          <p className="text-gray-700 font-medium mb-4">
-            How would you like to search?
-          </p>
-
           <button
             onClick={onSearchByLocation}
             className="w-full bg-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
           >
-            By Location
-          </button>
-
-          <button
-            onClick={onSearchByName}
-            className="w-full bg-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
-          >
-            By Name
+            Find DJs Near You
           </button>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <p className="text-sm text-gray-600 mb-4">
-            Are you a DJ looking to get more gigs?
-          </p>
-          <button
-            onClick={onDJSignup}
-            className="w-full bg-red-500 text-white py-2 px-4 rounded-lg font-medium hover:bg-red-600 transition-colors mb-3"
-          >
-            Sign Up as a DJ
-          </button>
+        <div className="mt-8 pt-6 border-t border-gray-200 text-center">
           <button
             onClick={onHowItWorks}
             className="w-full text-gray-600 hover:text-gray-800 font-medium"
